@@ -148,38 +148,40 @@ public class CalendarService {
 //        calendarService.addNewEvent(eventParam);
 //    }
 
-    public void deleteEvent(String start, String end) throws GeneralSecurityException, IOException {
+    public void deleteEvent(String eventID) throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        for(Event event : getEvent(start, end)) {
-            String eventID = event.getId();
-            service.events().delete("primary", eventID).execute();
-        }
+//        for(Event event : getEvent(start, end)) {
+//            String eventID = event.getId();
+//            service.events().delete("primary", eventID).execute();
+//        }
 
+        service.events().delete("primary", eventID).execute();
     }
-
-    public void updateEvent(String start, String end, EventParam eventParam) throws GeneralSecurityException, IOException {
+    
+    
+    public void updateEvent(String eventID, EventParam eventParam) throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
 
-        for(Event event : getEvent(start, end)) {
-            event.setSummary(eventParam.getSummary());
-            event.setLocation(eventParam.getLocation());
-            event.setDescription(eventParam.getDescription());
+        Event event = service.events().get("primary", eventID).execute();
+        event.setSummary(eventParam.getSummary());
+        event.setLocation(eventParam.getLocation());
+        event.setDescription(eventParam.getDescription());
 
-            List<EventAttendee> participants = new ArrayList<>();
-            for(int i = 0; i < eventParam.getParticipant().length; i++) {
-                participants.add(new EventAttendee().setEmail(eventParam.getParticipant()[i]));
-            }
-            event.setAttendees(participants);
-
-            service.events().update("primary", event.getId(), event).execute();
+        List<EventAttendee> participants = new ArrayList<>();
+        for(int i = 0; i < eventParam.getParticipant().length; i++) {
+            participants.add(new EventAttendee().setEmail(eventParam.getParticipant()[i]));
         }
+        event.setAttendees(participants);
+
+        service.events().update("primary", event.getId(), event).execute();
+
     }
 
 
