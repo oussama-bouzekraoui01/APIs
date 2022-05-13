@@ -33,14 +33,15 @@ public class CalendarController {
         calendarService.addNewEvent(eventParam);
     }
 
-    @DeleteMapping(path = "{start}/{end}")
-    public void deleteEvent(@PathVariable("start") String start, @PathVariable String end) throws GeneralSecurityException, IOException {
-        calendarService.deleteEvent(start, end);
+    @DeleteMapping(path = "{eventID}")
+    public void deleteEvent(@PathVariable("eventID") String eventID) throws GeneralSecurityException, IOException {
+        calendarService.deleteEvent(eventID);
     }
 
-    @PutMapping(path = "{start}/{end}")
-    public void updateEvent(@PathVariable("start") String start, @PathVariable String end, @RequestBody EventParam eventParam) throws GeneralSecurityException, IOException {
-        calendarService.updateEvent(start, end, eventParam);
+
+   @PutMapping(path = "{eventID}")
+    public void updateEvent(@PathVariable("eventID") String eventID, @RequestBody EventParam eventParam) throws GeneralSecurityException, IOException {
+        calendarService.updateEvent(eventID, eventParam);
     }
 
 
