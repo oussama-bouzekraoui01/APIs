@@ -173,6 +173,19 @@ public class CalendarService {
         event.setSummary(eventParam.getSummary());
         event.setLocation(eventParam.getLocation());
         event.setDescription(eventParam.getDescription());
+        
+        DateTime startDateTime = new DateTime(eventParam.getStart());
+        EventDateTime start = new EventDateTime()
+                .setDateTime(startDateTime)
+                .setTimeZone("Africa/Casablanca");
+        event.setStart(start);
+
+        DateTime endDateTime = new DateTime(eventParam.getEnd());
+        EventDateTime end = new EventDateTime()
+                .setDateTime(endDateTime)
+                .setTimeZone("Africa/Casablanca");
+        event.setEnd(end);
+        
 
         List<EventAttendee> participants = new ArrayList<>();
         for(int i = 0; i < eventParam.getParticipant().length; i++) {
